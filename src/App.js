@@ -1,18 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import Index from './components';
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-});
-
-const App = () =>
-	<View style={ styles.container }>
-		<Text>Get ready</Text>
-	</View>;
+const App = (context) =>
+	<Index { ...context }/>;
 
 export default App;
