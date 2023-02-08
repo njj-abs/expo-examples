@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import React, { useEffect } from 'react';
-import permissions from '../../services/permissions';
+import permissions from '@services/permissions';
 import AddContact from './AddContact';
 import RemoveContact from './RemoveContact';
 
