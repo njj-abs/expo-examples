@@ -4,6 +4,7 @@ const seed = {
 		data: [],
 		status: '',
 	},
+	file: {},
 };
 
 export default seed;
