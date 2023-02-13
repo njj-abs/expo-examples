@@ -6,6 +6,7 @@ import Location from './location';
 import Notification from './notification';
 import Share from './share';
 import Link from './link';
+import WebView from './webView';
 
 const Examples = {
 	IncreaseCount,
@@ -16,6 +17,7 @@ const Examples = {
 	Notification,
 	Share,
 	Link,
+	WebView,
 };
 
 export default Examples;
