@@ -1,6 +1,7 @@
 import * as Contacts from 'expo-contacts';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
+import * as ExpoLocation from 'expo-location';
 import statues from './statues';
 
 const permissions = {
@@ -29,6 +30,13 @@ const permissions = {
 		const permission = await MediaLibrary.requestPermissionsAsync();
 
 		context.patchState({ media: { ...permission }});
+	},
+
+	requestLocationPerm: async (context) => {
+		const { status } = await ExpoLocation
+			.requestForegroundPermissionsAsync();
+
+		await statues[`${ status }Location`](context);
 	},
 };
 

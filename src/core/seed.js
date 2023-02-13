@@ -10,6 +10,10 @@ const seed = {
 	media: {
 		file: '',
 	},
+	location: {
+		data: 'loading',
+		error: '',
+	},
 };
 
 export default seed;
