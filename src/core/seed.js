@@ -7,6 +7,9 @@ const seed = {
 	file: {
 		data: [],
 	},
+	media: {
+		file: '',
+	},
 };
 
 export default seed;

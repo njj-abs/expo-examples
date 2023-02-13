@@ -1,5 +1,6 @@
 import * as Contacts from 'expo-contacts';
 import { StorageAccessFramework } from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 import statues from './statues';
 
 const permissions = {
@@ -22,6 +23,12 @@ const permissions = {
 			...context.state.file,
 			...result,
 		});
+	},
+
+	requestMediaPermission: async (context) => {
+		const permission = await MediaLibrary.requestPermissionsAsync();
+
+		context.patchState({ media: { ...permission }});
 	},
 };
 

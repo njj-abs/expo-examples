@@ -1,4 +1,6 @@
 import { StorageAccessFramework } from 'expo-file-system';
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
 
 const fileService = {
 	readDirectory: async (context) => {
@@ -7,6 +9,18 @@ const fileService = {
 			.readDirectoryAsync(file.directoryUri);
 
 		actions.setReadDir({ ...file, data });
+	},
+
+	pickDocument: async (context) => {
+		const result = await DocumentPicker.getDocumentAsync();
+		const read = await FileSystem.readAsStringAsync(result.uri);
+
+		context.patchState({
+			media: {
+				...context.state.media,
+				read,
+			},
+		});
 	},
 };
 

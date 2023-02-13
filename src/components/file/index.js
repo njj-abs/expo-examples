@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import { React, useEffect } from 'react';
 import permissions from '@services/permissions';
 import ReadDirectory from './ReadDirectory';
+import ReadFile from './ReadFile';
 
 const File = (context) => {
 	useEffect(() => {
@@ -11,6 +12,7 @@ const File = (context) => {
 	return (
 		<View>
 			<ReadDirectory { ...context }/>
+			<ReadFile { ...context }/>
 		</View>
 	);
 };
