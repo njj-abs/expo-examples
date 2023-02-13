@@ -12,13 +12,14 @@ const fileService = {
 	},
 
 	pickDocument: async (context) => {
-		const result = await DocumentPicker.getDocumentAsync();
-		const read = await FileSystem.readAsStringAsync(result.uri);
+		const file = await DocumentPicker.getDocumentAsync();
+		const read = await FileSystem.readAsStringAsync(file.uri);
 
 		context.patchState({
 			media: {
 				...context.state.media,
 				read,
+				file,
 			},
 		});
 	},
