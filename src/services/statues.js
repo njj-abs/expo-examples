@@ -1,5 +1,6 @@
 import * as Contacts from 'expo-contacts';
 import * as ExpoLocation from 'expo-location';
+import * as Notifications from 'expo-notifications';
 
 const statues = {
 	grantedContact: async () => {
@@ -30,6 +31,11 @@ const statues = {
 		location: { error: 'Permission to access location was denied' },
 	}),
 
+	grantedNotification: async (context) => {
+		const { data } = await Notifications.getExpoPushTokenAsync();
+
+		context.patchState({ notification: { token: data }});
+	},
 };
 
 export default statues;

@@ -2,6 +2,7 @@ import * as Contacts from 'expo-contacts';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import * as ExpoLocation from 'expo-location';
+import * as Notifications from 'expo-notifications';
 import statues from './statues';
 
 const permissions = {
@@ -37,6 +38,17 @@ const permissions = {
 			.requestForegroundPermissionsAsync();
 
 		await statues[`${ status }Location`](context);
+	},
+
+	requestNotificationPerm: async (context) => {
+		const { status: existingStatus } = await Notifications
+			.getPermissionsAsync();
+		const { status } = existingStatus !== 'granted'
+			&& await Notifications.requestPermissionsAsync();
+
+		existingStatus === 'granted' || status === 'granted'
+			? statues.grantedNotification(context)
+			: alert('Failed to get push token for push notification!');
 	},
 };
 

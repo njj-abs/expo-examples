@@ -14,6 +14,10 @@ const seed = {
 		data: 'loading',
 		error: '',
 	},
+	notification: {
+		token: '',
+		data: '',
+	},
 };
 
 export default seed;
