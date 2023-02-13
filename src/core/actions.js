@@ -6,6 +6,8 @@ const actions = {
 	setDirPermission: ({ data }) => ({
 		file: data,
 	}),
+
+	setReadDir: ({ data }) => ({ file: data }),
 };
 
 export default actions;
