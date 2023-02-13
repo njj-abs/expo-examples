@@ -54,7 +54,9 @@
     "react-native-web": "~0.18.9",
     "expo-contacts": "~11.0.1",
     "expo-sms": "~11.0.0",
-    "expo-file-system": "~15.1.1"
+    "expo-file-system": "~15.1.1",
+    "expo-media-library": "~15.0.0",
+    "expo-document-picker": "~11.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
