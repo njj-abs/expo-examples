@@ -5,6 +5,7 @@ import File from './file';
 import Location from './location';
 import Notification from './notification';
 import Share from './share';
+import Link from './link';
 
 const Examples = {
 	IncreaseCount,
@@ -14,6 +15,7 @@ const Examples = {
 	Location,
 	Notification,
 	Share,
+	Link,
 };
 
 export default Examples;
