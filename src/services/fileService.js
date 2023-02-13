@@ -23,6 +23,20 @@ const fileService = {
 			},
 		});
 	},
+
+	writeFile: async (context) => {
+		const { state: { media: { file }}} = context;
+
+		await FileSystem.writeAsStringAsync(file.uri, 'write');
+		const read = await FileSystem.readAsStringAsync(file.uri);
+
+		context.patchState({
+			media: {
+				...context.state.media,
+				read,
+			},
+		});
+	},
 };
 
 export default fileService;
