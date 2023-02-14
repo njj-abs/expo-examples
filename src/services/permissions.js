@@ -6,15 +6,14 @@ import * as Notifications from 'expo-notifications';
 import statues from './statues';
 
 const permissions = {
-	requestContactPermission: (props) =>
-		(async (context) => {
-			const { status } = await Contacts.requestPermissionsAsync();
+	requestContactPermission: async (context) => {
+		const { status } = await Contacts.requestPermissionsAsync();
 
-			const data = await statues[`${ status }Contact`](context);
+		const data = await statues[`${ status }Contact`](context);
 
-			context.actions
-				.setContactPermission({ ...context.state.contact, ...data });
-		})(props),
+		context.actions
+			.setContactPermission({ ...context.state.contact, ...data });
+	},
 
 	requestDirPermission: async (context) => {
 		const result = await StorageAccessFramework
