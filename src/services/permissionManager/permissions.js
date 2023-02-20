@@ -1,6 +1,7 @@
 import * as Contacts from 'expo-contacts';
 import * as MediaLibrary from 'expo-media-library';
 import { StorageAccessFramework } from 'expo-file-system';
+import * as ExpoLocation from 'expo-location';
 
 const permissions = {
 	contact: async (context) => {
@@ -24,6 +25,17 @@ const permissions = {
 		context.actions.setDirPermission({
 			...context.state.file,
 			...result,
+		});
+	},
+	location: async (context) => {
+		const foregroundStatus = await ExpoLocation
+			.requestForegroundPermissionsAsync();
+
+		const backgroundStatus = context.data.background
+		&& await ExpoLocation.requestBackgroundPermissionsAsync();
+
+		context.patchState({
+			locationPermission: { foregroundStatus, backgroundStatus },
 		});
 	},
 };
