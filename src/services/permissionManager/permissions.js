@@ -4,6 +4,7 @@ import { StorageAccessFramework } from 'expo-file-system';
 import * as ExpoLocation from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import { Camera } from 'expo-camera';
+import * as Calendar from 'expo-calendar';
 
 const permissions = {
 	contact: async (context) => {
@@ -64,6 +65,12 @@ const permissions = {
 		context.patchState({
 			micPermission: result,
 		});
+	},
+
+	calendar: async (context) => {
+		const result = await Calendar.requestCalendarPermissionsAsync();
+
+		context.patchState({ calendar: result });
 	},
 };
 
