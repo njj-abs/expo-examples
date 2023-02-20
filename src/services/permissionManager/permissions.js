@@ -2,6 +2,7 @@ import * as Contacts from 'expo-contacts';
 import * as MediaLibrary from 'expo-media-library';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as ExpoLocation from 'expo-location';
+import * as Notifications from 'expo-notifications';
 
 const permissions = {
 	contact: async (context) => {
@@ -27,6 +28,7 @@ const permissions = {
 			...result,
 		});
 	},
+
 	location: async (context) => {
 		const foregroundStatus = await ExpoLocation
 			.requestForegroundPermissionsAsync();
@@ -36,6 +38,14 @@ const permissions = {
 
 		context.patchState({
 			locationPermission: { foregroundStatus, backgroundStatus },
+		});
+	},
+
+	notification: async (context) => {
+		const result = await Notifications.requestPermissionsAsync();
+
+		context.patchState({
+			notificationPermission: result,
 		});
 	},
 };
