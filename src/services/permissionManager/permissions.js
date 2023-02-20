@@ -57,6 +57,14 @@ const permissions = {
 			cameraPermission: result,
 		});
 	},
+
+	mic: async (context) => {
+		const result = await Camera.requestMicrophonePermissionsAsync();
+
+		context.patchState({
+			micPermission: result,
+		});
+	},
 };
 
 export default permissions;
