@@ -3,6 +3,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { StorageAccessFramework } from 'expo-file-system';
 import * as ExpoLocation from 'expo-location';
 import * as Notifications from 'expo-notifications';
+import { Camera } from 'expo-camera';
 
 const permissions = {
 	contact: async (context) => {
@@ -46,6 +47,14 @@ const permissions = {
 
 		context.patchState({
 			notificationPermission: result,
+		});
+	},
+
+	camera: async (context) => {
+		const result = await Camera.requestCameraPermissionsAsync();
+
+		context.patchState({
+			cameraPermission: result,
 		});
 	},
 };
