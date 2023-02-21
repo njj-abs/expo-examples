@@ -6,6 +6,7 @@ import * as Notifications from 'expo-notifications';
 import { Camera } from 'expo-camera';
 import * as Calendar from 'expo-calendar';
 import { DeviceMotion } from 'expo-sensors';
+import * as Brightness from 'expo-brightness';
 
 const permissions = {
 	contact: async (context) => {
@@ -78,6 +79,14 @@ const permissions = {
 		const result = await DeviceMotion.requestPermissionsAsync();
 
 		context.patchState({ deviceMotion: result });
+	},
+
+	brightness: async (context) => {
+		const result = await Brightness.requestPermissionsAsync();
+
+		context.patchState({
+			brightness: result,
+		});
 	},
 };
 
