@@ -5,7 +5,7 @@ import * as ExpoLocation from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import { Camera } from 'expo-camera';
 import * as Calendar from 'expo-calendar';
-import { Accelerometer, DeviceMotion } from 'expo-sensors';
+import { Accelerometer, DeviceMotion, Barometer } from 'expo-sensors';
 import * as Brightness from 'expo-brightness';
 
 const permissions = {
@@ -94,6 +94,14 @@ const permissions = {
 
 		context.patchState({
 			accelerometer: result,
+		});
+	},
+
+	barometer: async (context) => {
+		const result = await Barometer.requestPermissionsAsync();
+
+		context.patchState({
+			barometer: result,
 		});
 	},
 };
