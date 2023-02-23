@@ -5,7 +5,10 @@ import * as ExpoLocation from 'expo-location';
 import * as Notifications from 'expo-notifications';
 import { Camera } from 'expo-camera';
 import * as Calendar from 'expo-calendar';
-import { Accelerometer, DeviceMotion, Barometer } from 'expo-sensors';
+import {
+	Accelerometer, DeviceMotion, Barometer, Gyroscope, LightSensor,
+	Magnetometer,
+} from 'expo-sensors';
 import * as Brightness from 'expo-brightness';
 
 const permissions = {
@@ -102,6 +105,30 @@ const permissions = {
 
 		context.patchState({
 			barometer: result,
+		});
+	},
+
+	gyroscope: async (context) => {
+		const result = await Gyroscope.requestPermissionsAsync();
+
+		context.patchState({
+			gyroscope: result,
+		});
+	},
+
+	lightSensor: async (context) => {
+		const result = await LightSensor.requestPermissionsAsync();
+
+		context.patchState({
+			lightSensor: result,
+		});
+	},
+
+	magnetometer: async (context) => {
+		const result = await Magnetometer.requestPermissionsAsync();
+
+		context.patchState({
+			magnetometer: result,
 		});
 	},
 };
