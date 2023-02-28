@@ -22,7 +22,22 @@ const statues = {
 		const location = await ExpoLocation.getCurrentPositionAsync({
 			accuracy: ExpoLocation.Accuracy.BestForNavigation,
 		});
+		const count = 0;
+		// const watch = await ExpoLocation.watchPositionAsync({
+		// 	accuracy: ExpoLocation.Accuracy.High,
+		// 	timeInterval: 5000,
+		// 	distanceInterval: 1,
+		// },
+		// (watchPosition) => {
+		// 	count++,
+		// 	console.log({ watchPosition, count });
+		// });
 
+		// await ExpoLocation.watchHeadingAsync((head) => { console.log({ head }); });
+
+		const providerStatus = await ExpoLocation.getProviderStatusAsync();
+
+		console.log(providerStatus);
 		context.patchState({
 			location: { data: location },
 		});
