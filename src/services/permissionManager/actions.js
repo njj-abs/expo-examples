@@ -10,153 +10,101 @@ import {
 	Magnetometer,
 } from 'expo-sensors';
 import { Audio } from 'expo-av';
+import * as Cellular from 'expo-cellular';
 
 const permissions = {
 	foregroundLocation: {
+		fn: Location,
 		read: {
-			fn: Location,
 			prop: 'getForegroundPermissionsAsync',
 		},
 		create: {
-			fn: Location,
 			prop: 'requestForegroundPermissionsAsync',
 		},
 	},
 	backgroundLocation: {
+		fn: Location,
 		read: {
-			fn: Location,
 			prop: 'getBackgroundPermissionsAsync',
 		},
 		create: {
-			fn: Location,
 			prop: 'requestBackgroundPermissionsAsync',
 		},
 	},
 	notification: {
-		read: {
-			fn: Notification,
-		},
-		create: {
-			fn: Notification,
-		},
+		fn: Notification,
 	},
 	contacts: {
-		read: {
-			fn: Contacts,
-		},
-		create: {
-			fn: Contacts,
-		},
+		fn: Contacts,
 	},
 	camera: {
+		fn: Camera,
 		read: {
-			fn: Camera,
 			prop: 'getCameraPermissionsAsync',
 		},
 		create: {
-			fn: Camera,
+			prop: 'requestCameraPermissionsAsync',
 		},
 	},
 	mic: {
+		fn: Camera,
 		read: {
-			fn: Camera,
 			prop: 'getMicrophonePermissionsAsync',
 		},
 		create: {
-			fn: Camera,
+			prop: 'requestMicrophonePermissionsAsync',
 		},
 	},
 	media: {
-		read: {
-			fn: MediaLibrary,
-		},
-		create: {
-			fn: MediaLibrary,
-		},
+		fn: MediaLibrary,
 	},
 	calendar: {
+		fn: Calendar,
 		read: {
-			fn: Calendar,
 			prop: 'getCalendarPermissionsAsync',
 		},
 		create: {
-			fn: Calendar,
+			prop: 'requestCalendarPermissionsAsync',
 		},
 	},
 	brightness: {
-		read: {
-			fn: Brightness,
-		},
-		create: {
-			fn: Brightness,
-		},
+		fn: Brightness,
 	},
 	accelerometer: {
-		read: {
-			fn: Accelerometer,
-		},
-		create: {
-			fn: Accelerometer,
-		},
+		fn: Accelerometer,
 	},
 	deviceMotion: {
-		read: {
-			fn: DeviceMotion,
-		},
-		create: {
-			fn: DeviceMotion,
-		},
+		fn: DeviceMotion,
 	},
 	barometer: {
-		read: {
-			fn: Barometer,
-		},
-		create: {
-			fn: Barometer,
-		},
+		fn: Barometer,
 	},
 	gyroscope: {
-		read: {
-			fn: Gyroscope,
-		},
-		create: {
-			fn: Gyroscope,
-		},
+		fn: Gyroscope,
 	},
 	lightSensor: {
-		read: {
-			fn: LightSensor,
-		},
-		create: {
-			fn: LightSensor,
-		},
+		fn: LightSensor,
 	},
 	magnetometer: {
-		read: {
-			fn: Magnetometer,
-		},
-		create: {
-			fn: Magnetometer,
-		},
+		fn: Magnetometer,
 	},
 	audio: {
-		read: {
-			fn: Audio,
-		},
-		create: {
-			fn: Audio,
-		},
+		fn: Audio,
+	},
+	cellular: {
+		fn: Cellular,
 	},
 };
 
 const actions = {
 	read: async ({ entity, action }) => {
-		const { fn, prop = 'getPermissionsAsync' }
-		= permissions[entity][action];
+		const { fn } = permissions[entity];
+		const config = permissions[entity][action]?.prop
+		|| 'getPermissionsAsync';
 
 		return {
 			[entity]: {
-				allowed: (await fn[prop]()).granted,
+				allowed: (await fn[config]()).granted,
 			},
 		};
 	},
