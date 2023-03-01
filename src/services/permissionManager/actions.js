@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import * as Notification from 'expo-notifications';
+import * as Notifications from 'expo-notifications';
 import * as Contacts from 'expo-contacts';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
@@ -15,7 +15,7 @@ import { map } from '@laufire/utils/collection';
 
 const permissions = {
 	foregroundLocation: {
-		fn: Location,
+		provider: Location,
 		read: {
 			prop: 'getForegroundPermissionsAsync',
 		},
@@ -24,7 +24,7 @@ const permissions = {
 		},
 	},
 	backgroundLocation: {
-		fn: Location,
+		provider: Location,
 		read: {
 			prop: 'getBackgroundPermissionsAsync',
 		},
@@ -32,14 +32,14 @@ const permissions = {
 			prop: 'requestBackgroundPermissionsAsync',
 		},
 	},
-	notification: {
-		fn: Notification,
+	notifications: {
+		provider: Notifications,
 	},
 	contacts: {
-		fn: Contacts,
+		provider: Contacts,
 	},
 	camera: {
-		fn: Camera,
+		provider: Camera,
 		read: {
 			prop: 'getCameraPermissionsAsync',
 		},
@@ -47,8 +47,8 @@ const permissions = {
 			prop: 'requestCameraPermissionsAsync',
 		},
 	},
-	mic: {
-		fn: Camera,
+	microphone: {
+		provider: Camera,
 		read: {
 			prop: 'getMicrophonePermissionsAsync',
 		},
@@ -57,10 +57,10 @@ const permissions = {
 		},
 	},
 	media: {
-		fn: MediaLibrary,
+		provider: MediaLibrary,
 	},
 	calendar: {
-		fn: Calendar,
+		provider: Calendar,
 		read: {
 			prop: 'getCalendarPermissionsAsync',
 		},
@@ -69,34 +69,34 @@ const permissions = {
 		},
 	},
 	brightness: {
-		fn: Brightness,
+		provider: Brightness,
 	},
 	accelerometer: {
-		fn: Accelerometer,
+		provider: Accelerometer,
 	},
 	deviceMotion: {
-		fn: DeviceMotion,
+		provider: DeviceMotion,
 	},
 	barometer: {
-		fn: Barometer,
+		provider: Barometer,
 	},
 	gyroscope: {
-		fn: Gyroscope,
+		provider: Gyroscope,
 	},
 	lightSensor: {
-		fn: LightSensor,
+		provider: LightSensor,
 	},
 	magnetometer: {
-		fn: Magnetometer,
+		provider: Magnetometer,
 	},
 	audio: {
-		fn: Audio,
+		provider: Audio,
 	},
 	cellular: {
-		fn: Cellular,
+		provider: Cellular,
 	},
-	Pedometer: {
-		fn: Pedometer,
+	pedometer: {
+		provider: Pedometer,
 	},
 };
 
@@ -107,12 +107,12 @@ const actionsConfig = {
 
 const actions = {
 	...map(actionsConfig, (value) => async ({ entity, action }) => {
-		const { fn } = permissions[entity];
+		const { provider } = permissions[entity];
 		const config = permissions[entity][action]?.prop || value;
 
 		return {
 			[entity]: {
-				allowed: (await fn[config]()).granted,
+				allowed: (await provider[config]()).granted,
 			},
 		};
 	}),
