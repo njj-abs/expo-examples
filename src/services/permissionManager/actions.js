@@ -6,7 +6,7 @@ import * as MediaLibrary from 'expo-media-library';
 import * as Calendar from 'expo-calendar';
 import * as Brightness from 'expo-brightness';
 import {
-	Accelerometer, DeviceMotion, Barometer, Gyroscope, LightSensor,
+	Accelerometer, DeviceMotion, Barometer, Gyroscope, LightSensor, Pedometer,
 	Magnetometer,
 } from 'expo-sensors';
 import { Audio } from 'expo-av';
@@ -94,6 +94,9 @@ const permissions = {
 	},
 	cellular: {
 		fn: Cellular,
+	},
+	Pedometer: {
+		fn: Pedometer,
 	},
 };
 
