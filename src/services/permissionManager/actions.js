@@ -100,11 +100,6 @@ const permissions = {
 	},
 };
 
-const actionsConfig = {
-	read: 'getPermissionsAsync',
-	create: 'requestPermissionsAsync',
-};
-
 const actions = {
 	readAll: ({ action }) => {
 		const res = Promise.all(map(values(permissions), async (value, i) => {
@@ -141,6 +136,18 @@ const actions = {
 			: actions.readAll({ action, data, ...prop });
 
 		return res;
+	},
+
+	create: async ({ data: { id }, action }) => {
+		const { provider } = permissions[id];
+		const config = permissions[id][action]?.prop
+		|| 'requestPermissionsAsync';
+
+		return {
+			[id]: {
+				allowed: (await provider[config]()).granted,
+			},
+		};
 	},
 };
 
