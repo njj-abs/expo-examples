@@ -11,7 +11,7 @@ import {
 } from 'expo-sensors';
 import { Audio } from 'expo-av';
 import * as Cellular from 'expo-cellular';
-import { map } from '@laufire/utils/collection';
+import { keys, map, values } from '@laufire/utils/collection';
 
 const permissions = {
 	foregroundLocation: {
@@ -106,16 +106,42 @@ const actionsConfig = {
 };
 
 const actions = {
-	...map(actionsConfig, (value) => async ({ entity, action }) => {
-		const { provider } = permissions[entity];
-		const config = permissions[entity][action]?.prop || value;
+	readAll: ({ action }) => {
+		const res = Promise.all(map(values(permissions), async (value, i) => {
+			const key = keys(permissions)[i];
+			const config = value[action]?.prop
+			|| 'getPermissionsAsync';
 
-		return {
-			[entity]: {
-				allowed: (await provider[config]()).granted,
-			},
+			return {
+				[key]: {
+					allowed: (await value.provider[config]()).granted,
+				},
+			};
+		}));
+
+		return res;
+	},
+	read: async ({ action, data, ...prop }) => {
+		const { id } = data;
+
+		const getStatus = async () => {
+			const { provider } = permissions[id];
+			const config = permissions[id][action]?.prop
+			|| 'getPermissionsAsync';
+
+			return {
+				[id]: {
+					allowed: (await provider[config]()).granted,
+				},
+			};
 		};
-	}),
+
+		const res = id
+			? await getStatus()
+			: actions.readAll({ action, data, ...prop });
+
+		return res;
+	},
 };
 
 export default actions;
