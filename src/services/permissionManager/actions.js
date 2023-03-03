@@ -56,7 +56,7 @@ const permissions = {
 			prop: 'requestMicrophonePermissionsAsync',
 		},
 	},
-	media: {
+	storage: {
 		provider: MediaLibrary,
 	},
 	calendar: {

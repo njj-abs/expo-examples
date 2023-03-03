@@ -6,7 +6,7 @@ const config = {
 	],
 	permissions: [
 		{ entity: 'contacts' },
-		{ entity: 'media' },
+		{ entity: 'storage' },
 		{ entity: 'foregroundLocation' },
 		{ entity: 'backgroundLocation' },
 		{ entity: 'notifications' },
