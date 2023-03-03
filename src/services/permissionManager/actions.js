@@ -19,7 +19,7 @@ const permissions = {
 		read: {
 			prop: 'getForegroundPermissionsAsync',
 		},
-		create: {
+		update: {
 			prop: 'requestForegroundPermissionsAsync',
 		},
 	},
@@ -28,7 +28,7 @@ const permissions = {
 		read: {
 			prop: 'getBackgroundPermissionsAsync',
 		},
-		create: {
+		update: {
 			prop: 'requestBackgroundPermissionsAsync',
 		},
 	},
@@ -43,7 +43,7 @@ const permissions = {
 		read: {
 			prop: 'getCameraPermissionsAsync',
 		},
-		create: {
+		update: {
 			prop: 'requestCameraPermissionsAsync',
 		},
 	},
@@ -52,7 +52,7 @@ const permissions = {
 		read: {
 			prop: 'getMicrophonePermissionsAsync',
 		},
-		create: {
+		update: {
 			prop: 'requestMicrophonePermissionsAsync',
 		},
 	},
@@ -64,7 +64,7 @@ const permissions = {
 		read: {
 			prop: 'getCalendarPermissionsAsync',
 		},
-		create: {
+		update: {
 			prop: 'requestCalendarPermissionsAsync',
 		},
 	},
@@ -138,14 +138,16 @@ const actions = {
 		return res;
 	},
 
-	create: async ({ data: { id }, action }) => {
+	update: async ({ data: { id }, action }) => {
 		const { provider } = permissions[id];
 		const config = permissions[id][action]?.prop
 		|| 'requestPermissionsAsync';
 
+		const { granted } = await provider[config]();
+
 		return {
 			[id]: {
-				allowed: (await provider[config]()).granted,
+				allowed: granted,
 			},
 		};
 	},
