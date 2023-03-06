@@ -11,7 +11,7 @@ import {
 } from 'expo-sensors';
 import { Audio } from 'expo-av';
 import * as Cellular from 'expo-cellular';
-import { keys, map, values } from '@laufire/utils/collection';
+import { entries, map } from '@laufire/utils/collection';
 
 const permissions = {
 	foregroundLocation: {
@@ -101,8 +101,7 @@ const permissions = {
 };
 
 const readAll = ({ action }) => {
-	const res = Promise.all(map(values(permissions), async (value, i) => {
-		const id = keys(permissions)[i];
+	const res = Promise.all(map(entries(permissions), async ([id, value]) => {
 		const config = value[action]?.prop
 			|| 'getPermissionsAsync';
 
