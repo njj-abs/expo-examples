@@ -100,6 +100,23 @@ const permissions = {
 	},
 };
 
+const updateAll = ({ action }) => {
+	const res = Promise.all(map(entries(permissions), async ([id, value]) => {
+		const config = value[action]?.prop
+			|| 'requestPermissionsAsync';
+
+		const { status, canAskAgain } = await value.provider[config]();
+
+		return {
+			id,
+			status,
+			canAskAgain,
+		};
+	}));
+
+	return res;
+};
+
 const readAll = ({ action }) => {
 	const res = Promise.all(map(entries(permissions), async ([id, value]) => {
 		const config = value[action]?.prop
@@ -143,18 +160,24 @@ const actions = {
 		return res;
 	},
 
-	update: async ({ data: { id }, action }) => {
-		const { provider } = permissions[id];
-		const config = permissions[id][action]?.prop
-		|| 'requestPermissionsAsync';
+	update: async (data) => {
+		const { data: { id }, action } = data;
+		const getStatus = async () => {
+			const { provider } = permissions[id];
+			const config = permissions[id][action]?.prop
+			|| 'requestPermissionsAsync';
 
-		const { status, canAskAgain } = await provider[config]();
+			const { status, canAskAgain } = await provider[config]();
 
-		return {
-			id,
-			status,
-			canAskAgain,
+			return {
+				id,
+				status,
+				canAskAgain,
+			};
 		};
+		const res = id ? await getStatus() : updateAll(data);
+
+		return res;
 	},
 };
 

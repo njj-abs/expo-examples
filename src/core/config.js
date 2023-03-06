@@ -16,6 +16,7 @@ const config = {
 		{ entity: 'brightness' },
 		{ entity: 'accelerometer' },
 		{ entity: 'barometer' },
+		{ entity: 'audio' },
 	],
 };
 
