@@ -11,7 +11,7 @@ import {
 } from 'expo-sensors';
 import { Audio } from 'expo-av';
 import * as Cellular from 'expo-cellular';
-import { entries, map } from '@laufire/utils/collection';
+import { entries, map, reduce } from '@laufire/utils/collection';
 
 const permissions = {
 	foregroundLocation: {
@@ -100,85 +100,66 @@ const permissions = {
 	},
 };
 
-const updateAll = ({ action }) => {
-	const res = Promise.all(map(entries(permissions), async ([id, value]) => {
-		const config = value[action]?.prop
-			|| 'requestPermissionsAsync';
-
-		const { status, canAskAgain } = await value.provider[config]();
-
-		return {
-			id,
-			status,
-			canAskAgain,
-		};
-	}));
-
-	return res;
+const actionsConfig = {
+	read: 'getPermissionsAsync',
+	update: 'requestPermissionsAsync',
 };
 
-const readAll = ({ action }) => {
-	const res = Promise.all(map(entries(permissions), async ([id, value]) => {
-		const config = value[action]?.prop
-			|| 'getPermissionsAsync';
+const all = {
+	...reduce(
+		actionsConfig, (
+			acc, value, key,
+		) => ({
+			...acc,
+			[`${ key }All`]: ({ action }) => {
+				const res = Promise.all(map(entries(permissions),
+					async ([id, permission]) => {
+						const config = permission[action]?.prop
+						|| value;
 
-		const { status, canAskAgain } = await value.provider[config]();
+						const { status, canAskAgain }
+						= await permission.provider[config]();
 
-		return {
-			id,
-			status,
-			canAskAgain,
-		};
-	}));
+						return {
+							id,
+							status,
+							canAskAgain,
+						};
+					}));
 
-	return res;
+				return res;
+			},
+		}), {},
+	),
+
 };
 
 const actions = {
+	...map(actionsConfig, (value, key) =>
+		async (data) => {
+			const { action, data: { id }} = data;
 
-	read: async ({ action, data, ...prop }) => {
-		const { id } = data;
+			const getStatus = async () => {
+				const { provider } = permissions[id];
+				const config = permissions[id][action]?.prop
+				|| value;
 
-		const getStatus = async () => {
-			const { provider } = permissions[id];
-			const config = permissions[id][action]?.prop
-			|| 'getPermissionsAsync';
+				const { status, canAskAgain } = await provider[config]();
 
-			const { status, canAskAgain } = await provider[config]();
-
-			return {
-				id,
-				status,
-				canAskAgain,
+				return {
+					id,
+					status,
+					canAskAgain,
+				};
 			};
-		};
 
-		const res = id
-			? await getStatus()
-			: readAll({ action, data, ...prop });
+			const res = id
+				? await getStatus()
+				: all[`${ key }All`](data);
 
-		return res;
-	},
+			return res;
+		}),
 
-	update: async (data) => {
-		const { data: { id }, action } = data;
-		const getStatus = async () => {
-			const { provider } = permissions[id];
-			const config = permissions[id][action]?.prop
-			|| 'requestPermissionsAsync';
-
-			const { status, canAskAgain } = await provider[config]();
-
-			return {
-				id,
-				status,
-				canAskAgain,
-			};
-		};
-		const res = id ? await getStatus() : updateAll(data);
-
-		return res;
-	},
 };
 
 export default actions;
