@@ -103,14 +103,16 @@ const permissions = {
 const actions = {
 	readAll: ({ action }) => {
 		const res = Promise.all(map(values(permissions), async (value, i) => {
-			const key = keys(permissions)[i];
+			const id = keys(permissions)[i];
 			const config = value[action]?.prop
 			|| 'getPermissionsAsync';
 
+			const { status, canAskAgain } = await value.provider[config]();
+
 			return {
-				[key]: {
-					allowed: (await value.provider[config]()).granted,
-				},
+				id,
+				status,
+				canAskAgain,
 			};
 		}));
 
@@ -124,10 +126,12 @@ const actions = {
 			const config = permissions[id][action]?.prop
 			|| 'getPermissionsAsync';
 
+			const { status, canAskAgain } = await provider[config]();
+
 			return {
-				[id]: {
-					allowed: (await provider[config]()).granted,
-				},
+				id,
+				status,
+				canAskAgain,
 			};
 		};
 
@@ -143,12 +147,12 @@ const actions = {
 		const config = permissions[id][action]?.prop
 		|| 'requestPermissionsAsync';
 
-		const { granted } = await provider[config]();
+		const { status, canAskAgain } = await provider[config]();
 
 		return {
-			[id]: {
-				allowed: granted,
-			},
+			id,
+			status,
+			canAskAgain,
 		};
 	},
 };
