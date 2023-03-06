@@ -100,24 +100,26 @@ const permissions = {
 	},
 };
 
-const actions = {
-	readAll: ({ action }) => {
-		const res = Promise.all(map(values(permissions), async (value, i) => {
-			const id = keys(permissions)[i];
-			const config = value[action]?.prop
+const readAll = ({ action }) => {
+	const res = Promise.all(map(values(permissions), async (value, i) => {
+		const id = keys(permissions)[i];
+		const config = value[action]?.prop
 			|| 'getPermissionsAsync';
 
-			const { status, canAskAgain } = await value.provider[config]();
+		const { status, canAskAgain } = await value.provider[config]();
 
-			return {
-				id,
-				status,
-				canAskAgain,
-			};
-		}));
+		return {
+			id,
+			status,
+			canAskAgain,
+		};
+	}));
 
-		return res;
-	},
+	return res;
+};
+
+const actions = {
+
 	read: async ({ action, data, ...prop }) => {
 		const { id } = data;
 
@@ -137,7 +139,7 @@ const actions = {
 
 		const res = id
 			? await getStatus()
-			: actions.readAll({ action, data, ...prop });
+			: readAll({ action, data, ...prop });
 
 		return res;
 	},
