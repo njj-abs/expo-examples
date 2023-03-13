@@ -13,7 +13,7 @@ const App = (context) => {
 			pipe: peek,
 		})({
 			action: 'read',
-			entity: '',
+			entity: 'permissions',
 			data: { },
 		});
 	}, []);

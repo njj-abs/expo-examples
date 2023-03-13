@@ -1,7 +1,7 @@
 import permissions from './permissions';
 
 const actions = {
-	...permissions,
+	permissions,
 };
 
 export default actions;

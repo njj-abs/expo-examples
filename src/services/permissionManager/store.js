@@ -8,7 +8,7 @@ const PermissionStore = ({ data: permissionData, pipe }) => {
 
 		await pipe({ ...context, status: 'pending' });
 
-		const data = await actions[action]({
+		const data = await actions[entity][action]({
 			entity: entity || defaultEntity,
 			data: storeData,
 			action: action,
