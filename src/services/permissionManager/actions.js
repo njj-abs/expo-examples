@@ -11,7 +11,7 @@ import {
 } from 'expo-sensors';
 import { Audio } from 'expo-av';
 import * as Cellular from 'expo-cellular';
-import { entries, map, reduce } from '@laufire/utils/collection';
+import { entries, map } from '@laufire/utils/collection';
 
 const permissions = {
 	foregroundLocation: {
@@ -105,51 +105,39 @@ const actionsConfig = {
 	update: 'requestPermissionsAsync',
 };
 
+const enhancedPermissions = map(permissions, (value) => ({
+	...value,
+	...map(actionsConfig, (action, key) => ({
+		prop: value[key]?.prop || action,
+	})),
+}));
+
 const all = {
-	...reduce(
-		actionsConfig, (
-			acc, value, key,
-		) => ({
-			...acc,
-			[`${ key }All`]: ({ action }) => {
-				const res = Promise.all(map(entries(permissions),
-					async ([id, permission]) => {
-						const config = permission[action]?.prop
-						|| value;
+	readAll: ({ action }) => {
+		const res = Promise.all(map(entries(enhancedPermissions),
+			async ([id, permission]) => {
+				const config = permission[action].prop;
 
-						const { status, canAskAgain }
-						= await permission.provider[config]();
+				return {
+					id,
+					...await permission.provider[config](),
+				};
+			}));
 
-						return {
-							id,
-							status,
-							canAskAgain,
-						};
-					}));
-
-				return res;
-			},
-		}), {},
-	),
-
+		return res;
+	},
 };
 
 const actions = {
 	...map(actionsConfig, (value, key) =>
 		async (data) => {
 			const { action, data: { id }} = data;
-
 			const getStatus = async () => {
-				const { provider } = permissions[id];
-				const config = permissions[id][action]?.prop
-				|| value;
-
-				const { status, canAskAgain } = await provider[config]();
+				const { provider, [action]: config } = enhancedPermissions[id];
 
 				return {
 					id,
-					status,
-					canAskAgain,
+					...await provider[config.prop](),
 				};
 			};
 
