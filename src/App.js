@@ -1,62 +1,54 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React, { useRef } from 'react';
+import {
+	SafeAreaView,
+	Text,
+	View,
+	TouchableOpacity,
+} from 'react-native';
 import { WebView } from 'react-native-webview';
 import ButtonHtml from './button';
 
 // eslint-disable-next-line max-lines-per-function
 const App = () => {
-	const [counter, setCounter] = useState(0);
-	const webView = useRef();
-
-	const updateCounter = (value) => {
-		const injected = `
-      document.getElementById("counter").innerHTML='${ value }';
-    `;
-
-		webView.current.injectJavaScript(injected);
-		setCounter(value);
+	const onMessage = (data) => {
+		alert(data.nativeEvent.data);
 	};
 
-	const handleWebViewMessage = (event) => {
-		const { data } = event.nativeEvent;
-
-		if(data === 'dec')
-			updateCounter(counter - 1);
+	const sendDataToWebView = () => {
+		webviewRef.current.postMessage('Data from React Native App');
 	};
+
+	const webviewRef = useRef();
 
 	return (
-		<View style={ styles.container }>
+		<SafeAreaView style={ { flex: 1 } }>
+			<View style={ { alignItems: 'center' } }>
+				<TouchableOpacity
+					onPress={ () => sendDataToWebView() }
+					style={ {
+						padding: 20,
+						width: 300,
+						marginTop: 100,
+						backgroundColor: '#6751ff',
+						alignItems: 'center',
+					} }
+				>
+					<Text style={ { fontSize: 20, color: 'white' } }>
+						Send Data To WebView / Website
+					</Text>
+				</TouchableOpacity>
+			</View>
 			<WebView
-				ref={ webView }
-				style={ styles.webview }
-				originWhitelist={ ['*'] }
-				javaScriptEnabled={ true }
-				onMessage={ handleWebViewMessage }
-				source={ { html: ButtonHtml } }
-			/>
-			<Button
-				onPress={ () => {
-					updateCounter(counter + 1);
+				ref={ webviewRef }
+				scalesPageToFit={ false }
+				mixedContentMode="compatibility"
+				onMessage={ onMessage }
+				source={ {
+					html: ButtonHtml,
 				} }
-				title="Increment from React Native"
 			/>
-			<Text>Native code counter value</Text>
-			<Text>{counter}</Text>
-		</View>
+		</SafeAreaView>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		margin: 32,
-	},
-	webview: {
-		width: '100%',
-		borderWidth: 222,
-		borderColor: '#0F0',
-	},
-});
 
 export default App;

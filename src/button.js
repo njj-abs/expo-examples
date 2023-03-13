@@ -1,27 +1,34 @@
-const Button = `
-<html>
-<head></head>
-<body>
-<h1>HTML DOM Events</h1>
-<h2>The onclick Event</h2>
-<p id="demo"></p>
-
-<p>The onclick event triggers a function when an element is clicked on.</p>
-<p>Click to trigger a function that will output "Hello World":</p>
-
-<button onclick="myFunction()">Click me</button>
-<div>Webview counter value</div>
-  <h1 id="counter"></h1>
-  <button onclick="window.ReactNativeWebView.postMessage('dec');">
-    Decrement from JavaScript
+const Button = ` <html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body
+  style="
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  "
+>
+  <button
+  onclick="sendDataToReactNativeApp()"
+    style="
+      padding: 20;
+      width: 200;
+      font-size: 20;
+      color: white;
+      background-color: #6751ff;
+    "
+  >
+    Send Data To React Native App
   </button>
-<script>
-  function myFunction() {
-
-    window.ReactNativeWebView.postMessage("Hello!")
-    document.getElementById("demo").innerHTML = "Hello World";
-  }
-  
+  <script>
+    const sendDataToReactNativeApp = async () => {
+      window.ReactNativeWebView.postMessage('Data from WebView / Website');
+    };
+    document.addEventListener("message", message => {
+      alert(message.data) 
+    });
   </script>
 </body>
 </html>`;
