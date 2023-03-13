@@ -10,6 +10,11 @@ const Button = `
 <p>Click to trigger a function that will output "Hello World":</p>
 
 <button onclick="myFunction()">Click me</button>
+<div>Webview counter value</div>
+  <h1 id="counter"></h1>
+  <button onclick="window.ReactNativeWebView.postMessage('dec');">
+    Decrement from JavaScript
+  </button>
 <script>
   function myFunction() {
 
