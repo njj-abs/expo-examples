@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import ButtonHtml from './button';
+import CameraWebView from './CameraWebView';
 
 // eslint-disable-next-line max-lines-per-function
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
 					html: ButtonHtml,
 				} }
 			/>
+			<CameraWebView/>
 		</SafeAreaView>
 	);
 };
