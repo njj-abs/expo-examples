@@ -12,7 +12,7 @@ const App = (context) => {
 			},
 			pipe: peek,
 		})({
-			action: 'update',
+			action: 'read',
 			entity: '',
 			data: { },
 		});
